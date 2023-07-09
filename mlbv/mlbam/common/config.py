@@ -28,10 +28,10 @@ CONFIG = None  # holds a Config instance
 
 # These are initialized/updated via the Config class
 DEBUG = False
-VERBOSE = False
+VERBOSE = True
 VERIFY_SSL = True
 SAVE_JSON_FILE = True
-SAVE_PLAYLIST_FILE = False
+SAVE_PLAYLIST_FILE = True
 UNICODE = True
 DEFAULT_STREAM_START_OFFSET_SECS = 0
 
