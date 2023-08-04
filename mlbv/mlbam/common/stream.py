@@ -134,6 +134,7 @@ def streamlink_highlight(playback_url, fetch_filename, is_multi_highlight=False)
 def streamlink(
     stream_url, mlb_session, fetch_filename=None, from_start=False, offset=None
 ):
+    print("jared 1")
     LOG.debug("Stream url: %s", stream_url)
     # media_auth_cookie_str = access_token
     # user_agent_hdr = 'User-Agent=' + config.CONFIG.ua_iphone
@@ -142,7 +143,6 @@ def streamlink(
     video_player = config.CONFIG.parser["video_player"]
     streamlink_cmd = [
         "streamlink",
-        "--http-no-ssl-verify",
         "--http-cookie",
         "Authorization=" + mlb_session.access_token,
         "--http-header",
@@ -209,6 +209,7 @@ def streamlink(
     proc = subprocess.run(streamlink_cmd, check=False)
     if proc.returncode != 0:
         LOG.error("Non-zero exit code from streamlink: %s", proc.returncode)
+    
     return proc.returncode
 
 
