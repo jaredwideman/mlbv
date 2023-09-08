@@ -96,6 +96,8 @@ def play_stream(
     from_start,
     inning_ident,
     is_multi_highlight=False,
+    path=None,
+    cmd_only=False
 ):
     if game_rec["doubleHeader"] != "N":
         LOG.info("Selected game number %s of doubleheader", game_rec["gameNumber"])
@@ -144,19 +146,27 @@ def play_stream(
             inning_ident, media_state, media_playback_id, game_rec
         )
         if offset is None:
-            return 0  # already logged
-    return stream.streamlink(
-        stream_url,
-        mlb_session,
-        stream.get_fetch_filename(
+            LOG.warning("Using no offset")
+            offset = None
+
+    fetch_filename=None
+    if not path:
+        fetch_filename = stream.get_fetch_filename(
             date_str,
             game_rec["home"]["abbrev"],
             game_rec["away"]["abbrev"],
             feedtype,
             fetch,
-        ),
+        )
+
+    return stream.streamlink(
+        stream_url,
+        mlb_session,
+        fetch_filename,
         from_start,
         offset,
+        path,
+        cmd_only
     )
 
 

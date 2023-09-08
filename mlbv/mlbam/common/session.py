@@ -117,6 +117,8 @@ class Session(abc.ABC):
 
     @property
     def access_token(self):
+        # print(self._state["access_token"])
+        # exit()
         if (
             not self._state["access_token"]
             or not self.access_token_expiry

@@ -171,6 +171,17 @@ def main():
         ),
     )
     parser.add_argument(
+        "-p",
+        "--path",
+        help="path to download location"
+    )
+    parser.add_argument(
+        "-c",
+        "--cmd_only",
+        action="store_true",
+        help="don't play/download stream, just return the command"
+    )
+    parser.add_argument(
         "--inning-offset",
         type=int,
         metavar="SECS",
@@ -460,6 +471,8 @@ def main():
                         None,
                         None,
                         is_multi_highlight=True,
+                        path=args.path,
+                        cmd_only=args.cmd_only,
                     )
                 else:
                     LOG.info(
@@ -512,8 +525,11 @@ def main():
         args.fetch,
         args.from_start,
         args.inning,
+        path=args.path,
+        cmd_only=args.cmd_only
     )
 
 
 if __name__ in ("__main__", "main"):
-    sys.exit(main())
+    command = main()
+    print(command)

@@ -132,9 +132,8 @@ def streamlink_highlight(playback_url, fetch_filename, is_multi_highlight=False)
 
 
 def streamlink(
-    stream_url, mlb_session, fetch_filename=None, from_start=False, offset=None
+    stream_url, mlb_session, fetch_filename=None, from_start=False, offset=None, path=None, cmd_only=False
 ):
-    print("jared 1")
     LOG.debug("Stream url: %s", stream_url)
     # media_auth_cookie_str = access_token
     # user_agent_hdr = 'User-Agent=' + config.CONFIG.ua_iphone
@@ -176,10 +175,17 @@ def streamlink(
         # the --playe-no-close is required so it doesn't shut things down
         # prematurely after the stream is fully fetched
         streamlink_cmd.append("--player-no-close")
-    if fetch_filename:
-        fetch_filename = _uniquify_fetch_filename(fetch_filename)
+    if fetch_filename or path:
+        if fetch_filename:
+            fetch_filename = _uniquify_fetch_filename(fetch_filename)
+        else:
+            streamlink_cmd.append("--force")
+            fetch_filename = "raw.ts"
         streamlink_cmd.append("--output")
-        streamlink_cmd.append(fetch_filename)
+        if path:
+            streamlink_cmd.append(f"{path}/{fetch_filename}")
+        else:
+            streamlink_cmd.append(fetch_filename)
     elif video_player:
         LOG.debug("Using video_player: %s", video_player)
         streamlink_cmd.append("--player")
@@ -205,7 +211,9 @@ def streamlink(
     streamlink_cmd.append(stream_url)
     streamlink_cmd.append(_get_resolution())
 
-    LOG.debug("Playing: %s", str(streamlink_cmd))
+    if cmd_only:
+        return streamlink_cmd
+    print("BURGERBOB Playing: %s", str(streamlink_cmd))
     proc = subprocess.run(streamlink_cmd, check=False)
     if proc.returncode != 0:
         LOG.error("Non-zero exit code from streamlink: %s", proc.returncode)

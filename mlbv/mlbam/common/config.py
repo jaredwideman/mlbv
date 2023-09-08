@@ -88,7 +88,7 @@ class Config:
             if config_dir is not None:
                 break
         if config_dir is None:
-            print(
+            LOG.debug(
                 "No config directory found, using current directory. [searched: {}]".format(
                     ",".join(searched_paths)
                 )
